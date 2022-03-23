@@ -1,0 +1,174 @@
+<html class="no-js" lang="en"><head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<link rel="dns-prefetch preconnect" href="https://ajaxgeo.cartrawler.com">
+			<link rel="stylesheet" type="text/css" href="https://ajaxgeo.cartrawler.com/PCI/paymentform/css/app-desktop.css">
+			<title></title>
+
+	<script type="text/javascript">
+		var PCI = {};
+		var A11yFormErrorHandler = (function(Handler) {
+		  Handler = function(config) {
+		    var me = this;
+		    me.inputTypes = ['input', 'select', 'textarea', 'legend', 'optgroup', 'button', 'datalist', 'keygen', 'output'];
+		    me.IR = null;
+		    me.form = config && config.parent || null;
+		    me.inputs = {};
+
+		    setTimeout(function() {
+		    	me.inputs = me.updateInputsRef(me.form);
+		    });
+		  };
+
+		  Handler.prototype.onErrorSearchForm = function (errors, inputsRef) {
+		  	var errs = this.normalizeErrors(errors);
+		  	if(Object.keys(inputsRef).length ===0) return;
+		    this.readErrors(errs, inputsRef.ariaLive);
+		    this.focusFirstErrorInput(errs, inputsRef);
+		    this.updateLocalErrorMessageToRead(errs, inputsRef);
+		  };
+
+		  Handler.prototype.visualHidden = function(ele) {
+		    if(!ele) return false;
+		    ele.style.cssText = [
+		      'position: absolute',
+		      'clip: 0 0 0 0',
+		      'width: 1px',
+		      'height: 0',
+		      'margin-left: -1px',
+		      'overflow: hidden'
+		    ].join(';');
+		    return ele;
+		  };
+
+		  Handler.prototype.updateInputsRef = function(form) {
+		    form = form || this.form;
+		    if(!form) return;
+		    var ariaLiveEle, input, i, ln, id, label, inputs = {},
+		      ins = form.querySelectorAll.call(form, this.inputTypes.join(','));
+
+		    for(ln = ins.length, i = 0; i  < ln; i++ ) {
+		      id = ins[i].id;
+		      label = form.querySelector('label[for=\''+ id +'\']');
+		      inputs[id] = inputs[id] || {
+		        ele: ins[i],
+		        label: label
+		      };
+		    }
+
+		    inputs.ariaLive = this.initAriaLiveEle(form);
+		    return inputs;
+		  };
+
+		  Handler.prototype.initAriaLiveEle = function(form) {
+		    var ele = document.createElement('span');
+		    ele = this.visualHidden(ele);
+		    ele.className = 'ct-visual-hidden';
+		    ele.setAttribute('aria-live', 'assertive');
+		    form.appendChild(ele);
+		    return ele;
+		  };
+
+		  Handler.prototype.readErrors = function(errors, ariaLiveEle) {
+		    if(!errors || !ariaLiveEle) return false;
+		    var errorToRead = this.genErrorToRead(errors);
+		    this.updateAriaLive(errorToRead, ariaLiveEle);
+		  };
+
+		  Handler.prototype.updateLocalErrorMessageToRead = function(errors, inputsRef) {
+		    for(var i in inputsRef) {
+		      this.setAriaLabel(errors[i] ? errors[i] : '', inputsRef[i].label);
+		    }
+		  };
+
+		  Handler.prototype.setAriaLabel = function(errorMessage, ele) {
+		    if(ele && ele.setAttribute) {
+		      ele.setAttribute('aria-label', errorMessage);
+		    }
+		    return ele;
+		  };
+
+		  Handler.prototype.updateAriaLive = function(errorToRead, ariaLiveEle) {
+		    if(ariaLiveEle) {
+		    	ariaLiveEle.innerText = '';
+		      ariaLiveEle.innerText = errorToRead || '';
+		    }
+		  };
+
+		  Handler.prototype.genErrorToRead = function(errors) {
+		    var errorToRead = 'you have ' + Object.keys(errors).length + ' invalid inputs. ',
+		      i;
+
+		    for(i in errors) {errorToRead += ' ' + errors[i]; }
+		    return errorToRead;
+		  };
+
+		  Handler.prototype.normalizeErrors = function(errors) {
+		    var r = {};
+		    for(var i in errors) {
+		      if(typeof errors[i] === 'string') {
+		        r[i] = errors[i];
+		      }
+		    }
+		    return r;
+		  };
+
+		  Handler.prototype.focusFirstErrorInput = function(errors, inputsRef) {
+		    inputsRef = inputsRef || this.inputs;
+		    if(!inputsRef || !inputsRef[Object.keys(errors)[0]]) return false;
+		    var inputToFocus = inputsRef[Object.keys(errors)[0]].ele;
+		    if(inputToFocus) inputToFocus.focus();
+		  };
+
+		  return Handler;
+		})(A11yFormErrorHandler || {});
+  </script>
+
+	<style type="text/css">
+	.ct-form-field .ct-radio input[type="checkbox"]+label:before,
+	.ct-form-field .ct-checkbox input[type="checkbox"]+label.ct-error:before {
+	    content: "\e62b";
+	    color: red;
+	}
+
+</style>
+</head>
+<body onload="onLoad();" marginwidth="0" marginheight="0">
+<div id="ct-container" class="ct-hybrid-grid">
+    <div autoscroll="false">
+       <div class="ct-grid">
+	 <div class="ct-panel ct-no-padding" style="box-shadow: none;">
+		<div class="ct-component-payment-pci ct-padding">
+			<form class="ct-form ct-margin-top" name="form" id="ct_secure_form" action="paymentform" method="POST" autocomplete="off">
+			<input type="hidden" id="submitConfirm" name="submitConfirm" value="">
+			<input type="hidden" name="type" value="OTA_VehResRQ">
+			<input type="hidden" id="msg" name="msg" value="%7B%22%40Target%22%3A%22Production%22%2C%22%40PrimaryLangID%22%3A%22en%22%2C%22POS%22%3A%7B%22Source%22%3A%5B%7B%22%40ERSP_UserID%22%3A%22MP%22%2C%22%40ISOCurrency%22%3A%22COP%22%2C%22%40ISOCountry%22%3A%22CO%22%2C%22RequestorID%22%3A%7B%22%40Type%22%3A%2216%22%2C%22%40ID%22%3A%22606732%22%2C%22%40ID_Context%22%3A%22CARTRAWLER%22%7D%7D%2C%7B%22RequestorID%22%3A%7B%22%40Type%22%3A%2216%22%2C%22%40ID%22%3A%22631643715571218%22%2C%22%40ID_Context%22%3A%22CUSTOMERID%22%7D%7D%2C%7B%22RequestorID%22%3A%7B%22%40Type%22%3A%2216%22%2C%22%40ID%22%3A%22631643715571218%22%2C%22%40ID_Context%22%3A%22ENGINELOADID%22%7D%7D%2C%7B%22RequestorID%22%3A%7B%22%40Type%22%3A%2216%22%2C%22%40ID%22%3A%22CTABE_V5%3A5.225.0%22%2C%22%40Instance%22%3A%22spNe5vwzc60acGLh4AigzagBvj4%3D%22%2C%22%40ID_Context%22%3A%22VERSION%22%7D%7D%2C%7B%22RequestorID%22%3A%7B%22%40Type%22%3A%2216%22%2C%22%40ID%22%3A%223%22%2C%22%40ID_Context%22%3A%22BROWSERTYPE%22%7D%7D%5D%7D%2C%22%40xmlns%22%3A%22http%3A%2F%2Fwww.opentravel.org%2FOTA%2F2003%2F05%22%2C%22%40xmlns%3Axsi%22%3A%22http%3A%2F%2Fwww.w3.org%2F2001%2FXMLSchema-instance%22%2C%22%40Version%22%3A%223.000%22%2C%22VehResRQCore%22%3A%7B%22%40Status%22%3A%22All%22%2C%22VehRentalCore%22%3A%7B%22%40PickUpDateTime%22%3A%222022-02-20T18%3A00%3A00%22%2C%22%40ReturnDateTime%22%3A%222022-03-28T20%3A00%3A00%22%2C%22PickUpLocation%22%3A%7B%22%40CodeContext%22%3A%22CARTRAWLER%22%2C%22%40LocationCode%22%3A%225191%22%7D%2C%22ReturnLocation%22%3A%7B%22%40CodeContext%22%3A%22CARTRAWLER%22%2C%22%40LocationCode%22%3A%225191%22%7D%7D%2C%22Customer%22%3A%7B%22Primary%22%3A%7B%22PersonName%22%3A%7B%22GivenName%22%3A%22Camilo%22%2C%22Surname%22%3A%22Suarez%22%7D%2C%22Telephone%22%3A%5B%5D%2C%22Email%22%3A%7B%22%40EmailType%22%3A%222%22%2C%22%23text%22%3A%22test%40gmail.com%22%7D%2C%22Address%22%3A%7B%22%40Type%22%3A%222%22%2C%22AddressLine%22%3A%5B%5D%2C%22CityName%22%3A%22NONE%22%2C%22CountryName%22%3A%7B%22%40Code%22%3A%22CO%22%7D%7D%2C%22CitizenCountryName%22%3A%7B%22%40Code%22%3A%22CO%22%7D%7D%7D%2C%22DriverType%22%3A%7B%22%40Age%22%3A30%7D%2C%22RateQualifier%22%3A%7B%7D%7D%2C%22VehResRQInfo%22%3A%7B%22OffLocService%22%3A%5B%5D%2C%22RentalPaymentPref%22%3A%7B%22PaymentCard%22%3A%7B%22%40CardCode%22%3A%22%5BCARDCODE%5D%22%2C%22%40ExpireDate%22%3A%22%5BEXPIREDATE%5D%22%2C%22CardHolderName%22%3A%22%5BCARDHOLDERNAME%5D%22%2C%22CardNumber%22%3A%7B%22PlainText%22%3A%22%5BCARDNUMBER%5D%22%7D%2C%22SeriesCode%22%3A%7B%22PlainText%22%3A%22%5BSERIESCODE%5D%22%7D%2C%22ThreeDomainSecurity%22%3A%7B%22Gateway%22%3A%7B%22%40ECI%22%3A%22%5BECI%5D%22%2C%22%40MerchantID%22%3A%22%5BMERCHANTID%5D%22%7D%2C%22Results%22%3A%7B%22%40CAVV%22%3A%22%5BCAVV%5D%22%2C%22%40TransactionID%22%3A%22%5BTRANSACTIONID%5D%22%2C%22%40XID%22%3A%22%5BXID%5D%22%7D%7D%2C%22TPA_Extensions%22%3A%7B%22ThreeDsVersion%22%3A%22%5BTHREEDSVERSION%5D%22%7D%7D%7D%2C%22Reference%22%3A%7B%22%40Type%22%3A%2216%22%2C%22%40ID%22%3A%222058549356%22%2C%22%40ID_Context%22%3A%22CARTRAWLER%22%2C%22%40DateTime%22%3A%222022-02-01T21%3A31%3A21.631Z%22%2C%22%40URL%22%3A%22c3c159e1-a39f-4703-bda6-4b898ead4705.257%22%7D%2C%22TPA_Extensions%22%3A%7B%22Referral%22%3A%22PC%22%2C%22MarketingEmail%22%3A%7B%22%40save%22%3Atrue%7D%2C%22Stats%22%3A%7B%22InsO%22%3A%220%22%7D%2C%22ConsumerIP%22%3A%22186.145.140.27%22%2C%22Window%22%3A%7B%22%40name%22%3A%22Emirates%2520-%2520Book%2520Car%2520Hire%22%2C%22%40engine%22%3A%22CTABE-V5.0%22%2C%22%40svn%22%3A%225.225.0%22%2C%22%40CTMVTScenario%22%3A%22%22%2C%22%40CTMVTBucket%22%3A%22%22%2C%22%40CTMVTVersion%22%3A%22%22%2C%22%40product%22%3A%22CarWeb%22%2C%22%40region%22%3A%22en%22%2C%22%40device%22%3A%22DESKTOPWEB%22%2C%22UserAgent%22%3A%22User-Agent%3AMozilla%2F5.0%20(Windows%20NT%2010.0%3B%20Win64%3B%20x64)%20AppleWebKit%2F537.36%20(KHTML%2C%20like%20Gecko)%20Chrome%2F90.0.4430.93%20Safari%2F537.36%22%2C%22BrowserName%22%3A%22chrome%22%2C%22BrowserVersion%22%3A%2290%22%2C%22URL%22%3A%22https%3A%2F%2Fcars.cartrawler.com%2Femirates%2Fen%2Fbook%3Fage%3D30%26clientID%3D606732%26ct%3DMP%26curr%3DCOP%26elID%3D631643715571218%26pickupDateTime%3D2022-02-20T18%253A00%26residenceID%3DCO%26returnDateTime%3D2022-03-28T20%253A00%26countryID%3DUS%26%26pickupCountryCode%3DUS%26returnCountryCode%3DUS%26pickupID%3D5191%26pickupName%3DNew%2520York%2520-%2520La%2520Guardia%2520Airport%26returnID%3D5191%26returnName%3DNew%2520York%2520-%2520La%2520Guardia%2520Airport%22%7D%2C%22Tracking%22%3A%7B%22SessionID%22%3A%22631643715571218%22%2C%22CustomerID%22%3A%22631643715571218%22%2C%22EngineLoadID%22%3A%22631643715571218%22%7D%7D%7D%7D">
+			<input type="hidden" name="chkTCs" value="false" id="chkTCs">
+			<input type="hidden" name="lang" value="EN">
+			<input type="hidden" name="mobile" value="false">
+                        <input type="hidden" name="css" value="">
+			<input type="hidden" name="deBundle" value="false">
+			<input type="hidden" name="hideButton" value="true">
+			<input type="hidden" name="debitCardCheck" value="false">
+			<input type="hidden" id="enableDCC" name="enableDCC" value="true">
+			<input type="hidden" name="msgDCC" value="%7B%22%40xmlns%22%3A%22http%3A%2F%2Fwww.cartrawler.com%2F%22%2C%22%40xmlns%3Axsi%22%3A%22http%3A%2F%2Fwww.w3.org%2F2001%2FXMLSchema-instance%22%2C%22%40xsi%3AschemaLocation%22%3A%22http%3A%2F%2Fwww.cartrawler.com%2F+CT_CurrencyChangeRS.xsd%22%2C%22%40Version%22%3A%221.000%22%2C%22%40Target%22%3A%22Production%22%2C%22%40PrimaryLangID%22%3A%22EN%22%2C%22%40TimeStamp%22%3A%222022-02-01T21%3A31%3A37.408Z%22%2C%22VehAvail%22%3A%7B%22TotalCharge%22%3A%7B%22%40RateTotalAmount%22%3A%22234104.37%22%2C%22%40EstimatedTotalAmount%22%3A%22234104.37%22%2C%22%40CurrencyCode%22%3A%22RUB%22%2C%22%40ExchangeRate%22%3A%2281.1138738692093%22%2C%22%40InverseExchangeRate%22%3A%220.012328347201798383%22%2C%22%40DCC%22%3A%22464636%22%7D%2C%22Fees%22%3A%7B%22Fee%22%3A%5B%7B%22%40Purpose%22%3A%2222%22%2C%22%40Amount%22%3A%22234104.37%22%2C%22%40CurrencyCode%22%3A%22RUB%22%7D%2C%7B%22%40Purpose%22%3A%2223%22%2C%22%40Amount%22%3A%220.0%22%2C%22%40CurrencyCode%22%3A%22USD%22%7D%2C%7B%22%40Purpose%22%3A%226%22%2C%22%40Amount%22%3A%220.0%22%2C%22%40CurrencyCode%22%3A%22RUB%22%7D%2C%7B%22%40Purpose%22%3A%22801.VCP.X%22%2C%22%40Amount%22%3A%22234104.37%22%2C%22%40CurrencyCode%22%3A%22RUB%22%7D%2C%7B%22%40Purpose%22%3A%22802.VCP.X%22%2C%22%40Amount%22%3A%220.0%22%2C%22%40CurrencyCode%22%3A%22RUB%22%7D%2C%7B%22%40Purpose%22%3A%22803.VCP.X%22%2C%22%40Amount%22%3A%22234104.37%22%2C%22%40CurrencyCode%22%3A%22RUB%22%7D%5D%7D%2C%22Reference%22%3A%7B%22%40Type%22%3A%2216%22%2C%22%40ID%22%3A%222058549356%22%2C%22%40ID_Context%22%3A%22CARTRAWLER%22%2C%22%40DateTime%22%3A%222022-02-01T21%3A31%3A21.631Z%22%2C%22%40URL%22%3A%227830d862-c72f-49e7-b149-f8c211ea97f1.03%22%7D%7D%2C%22Success%22%3Anull%7D">
+			<input type="hidden" name="logMessage" id="logMessage" value="">
+
+			<input type="hidden" id="creditCardValidForm" name="creditCardValidForm" value="4646364646464646">
+			<input type="hidden" id="submitDCC" name="submitDCC" value="">
+
+			<input type="hidden" id="paymentTxId" name="paymentTxId" value="PHO20220201213131_0605839">
+			<input type="hidden" id="psd2Enabled" name="psd2Enabled" value="true">
+			<input type="hidden" id="JWTSessionID" name="JWTSessionID" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJQSE8yMDIyMDIwMTIxMzEzMV8wNjA1ODM5IiwiaWF0IjoxNjQzNzUxMDkxLCJPcmdVbml0SWQiOiI1Y2MxYmRmNzAxNzI5ZDBjODgxZWU0ZmYiLCJQYXlsb2FkIjp7Ik9yZGVyRGV0YWlscyI6eyJPcmRlck51bWJlciI6IjEiLCJBbW91bnQiOiIxMTQyMzU5MTYxIiwiQ3VycmVuY3lDb2RlIjoiQ09QIn19LCJPYmplY3RpZnlQYXlsb2FkIjp0cnVlLCJpc3MiOiI1ZDIzNmIwYWFkYjE1NjQxOGM5OGRhNzkifQ.ssxOpWbVFPE8rNuZeUmrJ9d7jwbgkcRhi0KZCGG7zy8">
+			<input type="hidden" id="authSessionID" name="authSessionID" value="0_e9ef299c-bf6e-41eb-a187-4c605eeb0524">
+			<input type="hidden" id="authOrderID" name="authOrderID" value="PHO20220201213131_0605839">
+			<input type="hidden" id="authASCUrl" name="authASCUrl" value="">
+			<input type="hidden" id="authPayload" name="authPayload" value="">
+			<input type="hidden" id="authTransactionId" name="authTransactionId" value="">
+            <input type="hidden" id="authMid" name="authMid" value="">
+			<input type="hidden" id="authCAVV" name="authCAVV" value="">
+			<input type="hidden" id="authECI" name="authECI" value="">
+			<input type="hidden" id="authDsTransactionId" name="authDsTransactionId" value="">
+            <input type="hidden" id="authXId" name="authXId" value="">
+            </form></div></div></div></div></div></body></html>
